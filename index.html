@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caique Menghin — O Estourador de Buracos</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0d0d0d;
+    --bg2: #1a1a1a;
+    --orange: #ff6b1a;
+    --yellow: #ffc93c;
+    --red: #e63946;
+    --text: #f5f5f5;
+    --muted: #888;
+  }
+
+  body {
+    font-family: 'Georgia', serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(255,107,26,0.15), transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(230,57,70,0.12), transparent 50%),
+      linear-gradient(180deg, #0d0d0d 0%, #1a1a1a 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 30px 30px;
+    pointer-events: none;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 0.4rem 1.2rem;
+    background: var(--orange);
+    color: #000;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    letter-spacing: 3px;
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+    border-radius: 2px;
+    animation: slideDown 1s ease-out;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 8vw, 6rem);
+    font-weight: 900;
+    letter-spacing: -2px;
+    line-height: 0.95;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    animation: fadeUp 1.2s ease-out;
+  }
+
+  .hero h1 span {
+    display: block;
+    color: var(--orange);
+    text-shadow: 0 0 40px rgba(255,107,26,0.5);
+  }
+
+  .hero .subtitle {
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    color: var(--muted);
+    max-width: 600px;
+    margin-bottom: 3rem;
+    font-style: italic;
+    animation: fadeUp 1.4s ease-out;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    color: var(--muted);
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    animation: bounce 2s infinite;
+  }
+
+  /* ===== STORY ===== */
+  .story {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+  }
+
+  .story p {
+    font-size: 1.15rem;
+    margin-bottom: 1.8rem;
+    color: #d5d5d5;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s ease-out;
+  }
+
+  .story p.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .story p em {
+    color: var(--yellow);
+    font-style: normal;
+    font-weight: bold;
+  }
+
+  .story strong {
+    color: var(--orange);
+  }
+
+  /* ===== QUOTES ===== */
+  .quotes {
+    background: var(--bg2);
+    padding: 5rem 2rem;
+    border-top: 2px solid var(--orange);
+    border-bottom: 2px solid var(--orange);
+  }
+
+  .quotes h2 {
+    text-align: center;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    margin-bottom: 3rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .quotes h2 span { color: var(--orange); }
+
+  .quote-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .quote-card {
+    background: linear-gradient(135deg, #222 0%, #111 100%);
+    padding: 2rem;
+    border-left: 4px solid var(--orange);
+    border-radius: 4px;
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+  }
+
+  .quote-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(255,107,26,0.2);
+  }
+
+  .quote-card::before {
+    content: '"';
+    position: absolute;
+    top: -10px;
+    left: 15px;
+    font-size: 5rem;
+    color: var(--orange);
+    opacity: 0.3;
+    font-family: Georgia, serif;
+    line-height: 1;
+  }
+
+  .quote-card p {
+    font-size: 1.05rem;
+    font-style: italic;
+    color: #e0e0e0;
+    padding-left: 1rem;
+  }
+
+  .quote-card .author {
+    display: block;
+    margin-top: 1rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-style: normal;
+    text-align: right;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* ===== INTERACTIVE ===== */
+  .interactive {
+    padding: 6rem 2rem;
+    text-align: center;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(255,107,26,0.08), transparent 70%),
+      var(--bg);
+  }
+
+  .interactive h2 {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+
+  .interactive p {
+    color: var(--muted);
+    margin-bottom: 2.5rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hole-board {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+    max-width: 500px;
+    margin: 0 auto 2.5rem;
+  }
+
+  .hole {
+    aspect-ratio: 1;
+    background: radial-gradient(circle at center, #000 0%, #111 60%, #222 100%);
+    border-radius: 50%;
+    border: 3px solid #333;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+  }
+
+  .hole:hover {
+    border-color: var(--orange);
+    transform: scale(1.05);
+  }
+
+  .hole.popped {
+    animation: pop 0.6s ease-out;
+    border-color: var(--yellow);
+    background: radial-gradient(circle at center, var(--yellow) 0%, var(--orange) 60%, #222 100%);
+    box-shadow: 0 0 30px var(--orange), inset 0 0 20px rgba(0,0,0,0.5);
+  }
+
+  @keyframes pop {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.3); }
+    60% { transform: scale(0.9); }
+    100% { transform: scale(1); }
+  }
+
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-number {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--orange);
+    font-family: 'Courier New', monospace;
+    display: block;
+  }
+
+  .stat-label {
+    color: var(--muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .reset-btn {
+    margin-top: 2rem;
+    padding: 0.8rem 2rem;
+    background: transparent;
+    color: var(--orange);
+    border: 2px solid var(--orange);
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s;
+  }
+
+  .reset-btn:hover {
+    background: var(--orange);
+    color: #000;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: #000;
+    padding: 3rem 2rem;
+    text-align: center;
+    border-top: 1px solid #222;
+  }
+
+  footer .signature {
+    font-size: 1.3rem;
+    color: var(--orange);
+    font-style: italic;
+    margin-bottom: 1rem;
+  }
+
+  footer p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* ===== PARTICLES ===== */
+  .particle {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+  }
+
+  @media (max-width: 600px) {
+    .hole-board { grid-template-columns: repeat(4, 1fr); }
+    .stats { gap: 1.5rem; }
+    .stat-number { font-size: 2.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="badge">LENDA URBANA · EDIÇÃO ESPECIAL</div>
+  <h1>Caique Menghin<span>O Estourador de Buracos</span></h1>
+  <p class="subtitle">A história do homem que nasceu com uma vocação. E cumpriu ela com orgulho.</p>
+  <div class="scroll-hint">↓ ROLA PRA BAIXO ↓</div>
+</section>
+
+<section class="story">
+  <p><strong>Caique Menghin</strong> sempre teve um dom especial. Desde moleque, ele olhava pra qualquer buraco e já sabia exatamente o que fazer. Não importava se era fundo, apertado, meio sujo ou que ninguém mais tinha coragem de mexer… ele chegava, analisava, e <em>estourava</em>.</p>
+
+  <p>No bairro, o pessoal já falava baixinho:</p>
+
+  <p><em>— Lá vem o Menghin… cuidado com o buraco.</em></p>
+
+  <p>Ele não se importava. Pelo contrário. <strong>Quanto mais apertado o buraco, mais ele gostava de trabalhar.</strong> Tinha técnica: primeiro examinava a entrada, depois enfiava com cuidado, sentia a resistência, e na hora certa… <em>pum</em>. Estourava tudo. Saía até o ar comprimido. Às vezes saía até um gritinho.</p>
+
+  <p>Certa vez, um amigo chegou todo preocupado:</p>
+
+  <p><em>— Cara, tem um buraco aqui que tá impossível. Já tentei de tudo. Não abre de jeito nenhum.</em></p>
+
+  <p>Caique só sorriu, aquele sorriso de quem já tinha estourado uns duzentos.</p>
+
+  <p><em>— Deixa comigo. Eu sou especialista em buraco difícil.</em></p>
+
+  <p>Ele se ajoelhou, examinou, colocou a mão… e em menos de dois minutos o buraco tava totalmente liberado. O amigo ficou de boca aberta.</p>
+
+  <p><em>— Porra, Menghin… você é um artista.</em></p>
+
+  <p><strong>— Não é arte, mano. É vocação. Nasci pra estourar buraco.</strong></p>
+
+  <p>Com o tempo a fama só cresceu. Em festa, em obra, em qualquer lugar que tivesse um buraco precisando de atenção, alguém lembrava:</p>
+
+  <p><em>— Chama o Caique. Ele estoura qualquer um.</em></p>
+
+  <p>E ele ia. Chegava calmo, sem pressa, mas quando começava o serviço… ninguém conseguia ficar parado. Às vezes o buraco até gemia. Outras vezes soltava um barulho molhado. Caique só limpava a mão depois e falava, orgulhoso:</p>
+
+  <p><strong>— Pronto. Estourou limpo. Pode usar de novo.</strong></p>
+
+  <p>Um dia um cara novo no bairro perguntou, inocente:</p>
+
+  <p><em>— Mas por que todo mundo chama ele de Estourador de Buracos?</em></p>
+
+  <p>O pessoal só riu.</p>
+
+  <p><em>— Porque, irmão… se tem buraco, o Caique Menghin estoura. E estoura bem.</em></p>
+
+  <p>Caique, do outro lado da mesa, levantou a cerveja e completou, sem nenhum pudor:</p>
+
+  <p><strong>— E o melhor de tudo? Quanto mais apertado… mais eu gosto de estourar.</strong></p>
+
+  <p>E todo mundo riu. Porque todo mundo já sabia exatamente de que tipo de buraco ele estava falando.</p>
+</section>
+
+<section class="quotes">
+  <h2>Frases <span>Memoráveis</span></h2>
+  <div class="quote-grid">
+    <div class="quote-card">
+      <p>Não é arte, mano. É vocação. Nasci pra estourar buraco.</p>
+      <span class="author">— C. Menghin</span>
+    </div>
+    <div class="quote-card">
+      <p>Quanto mais apertado o buraco, mais eu gosto de trabalhar.</p>
+      <span class="author">— C. Menghin</span>
+    </div>
+    <div class="quote-card">
+      <p>Pronto. Estourou limpo. Pode usar de novo.</p>
+      <span class="author">— C. Menghin</span>
+    </div>
+    <div class="quote-card">
+      <p>Se tem buraco, o Caique Menghin estoura. E estoura bem.</p>
+      <span class="author">— O Bairro</span>
+    </div>
+    <div class="quote-card">
+      <p>Lá vem o Menghin… cuidado com o buraco.</p>
+      <span class="author">— O Bairro</span>
+    </div>
+    <div class="quote-card">
+      <p>Porra, Menghin… você é um artista.</p>
+      <span class="author">— Amigo admirado</span>
+    </div>
+  </div>
+</section>
+
+<section class="interactive">
+  <h2>Ajude o <span style="color:var(--orange)">Menghin</span></h2>
+  <p>Clique nos buracos pra ajudar o mestre a estourar. Cada estouro conta.</p>
+
+  <div class="hole-board" id="holeBoard"></div>
+
+  <div class="stats">
+    <div class="stat">
+      <span class="stat-number" id="poppedCount">0</span>
+      <span class="stat-label">Buracos Estourados</span>
+    </div>
+    <div class="stat">
+      <span class="stat-number" id="remainingCount">20</span>
+      <span class="stat-label">Buracos Restantes</span>
+    </div>
+    <div class="stat">
+      <span class="stat-number" id="level">1</span>
+      <span class="stat-label">Nível de Menghin</span>
+    </div>
+  </div>
+
+  <button class="reset-btn" id="resetBtn">Reiniciar Serviço</button>
+</section>
+
+<footer>
+  <p class="signature">"Nasci pra estourar buraco."</p>
+  <p>© Lenda Urbana · Caique Menghin · Todos os buracos reservados</p>
+</footer>
+
+<script>
+  // ===== SCROLL REVEAL =====
+  const storyParagraphs = document.querySelectorAll('.story p');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.2 });
+
+  storyParagraphs.forEach(p => observer.observe(p));
+
+  // ===== HOLE GAME =====
+  const holeBoard = document.getElementById('holeBoard');
+  const poppedCountEl = document.getElementById('poppedCount');
+  const remainingCountEl = document.getElementById('remainingCount');
+  const levelEl = document.getElementById('level');
+  const resetBtn = document.getElementById('resetBtn');
+
+  const TOTAL_HOLES = 20;
+  let popped = 0;
+
+  function createHoles() {
+    holeBoard.innerHTML = '';
+    popped = 0;
+    updateStats();
+    for (let i = 0; i < TOTAL_HOLES; i++) {
+      const hole = document.createElement('div');
+      hole.className = 'hole';
+      hole.dataset.index = i;
+      hole.addEventListener('click', popHole);
+      holeBoard.appendChild(hole);
+    }
+  }
+
+  function popHole(e) {
+    const hole = e.currentTarget;
+    if (hole.classList.contains('popped')) return;
+
+    hole.classList.add('popped');
+    popped++;
+    updateStats();
+    spawnParticles(e.clientX, e.clientY);
+
+    if (popped === TOTAL_HOLES) {
+      setTimeout(() => {
+        alert('🎉 PARABÉNS! Você ajudou o Menghin a estourar todos os buracos!\n"Pronto. Estourou limpo. Pode usar de novo."');
+      }, 400);
+    }
+  }
+
+  function updateStats() {
+    poppedCountEl.textContent = popped;
+    remainingCountEl.textContent = TOTAL_HOLES - popped;
+    levelEl.textContent = Math.floor(popped / 5) + 1;
+  }
+
+  function spawnParticles(x, y) {
+    const colors = ['#ff6b1a', '#ffc93c', '#e63946', '#f5f5f5'];
+    for (let i = 0; i < 12; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.background = colors[Math.floor(Math.random() * colors.length)];
+      p.style.left = x + 'px';
+      p.style.top = y + 'px';
+      document.body.appendChild(p);
+
+      const angle = (Math.PI * 2 * i) / 12;
+      const velocity = 80 + Math.random() * 60;
+      const dx = Math.cos(angle) * velocity;
+      const dy = Math.sin(angle) * velocity;
+
+      p.animate([
+        { transform: 'translate(0,0) scale(1)', opacity: 1 },
+        { transform: `translate(${dx}px, ${dy}px) scale(0)`, opacity: 0 }
+      ], {
+        duration: 700 + Math.random() * 300,
+        easing: 'cubic-bezier(0.2, 0.8, 0.4, 1)'
+      }).onfinish = () => p.remove();
+    }
+  }
+
+  resetBtn.addEventListener('click', createHoles);
+  createHoles();
+
+  // ===== QUOTE CLICK EFFECT =====
+  document.querySelectorAll('.quote-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      spawnParticles(e.clientX, e.clientY);
+    });
+  });
+</script>
+
+</body>
+</html>
